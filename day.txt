@@ -1,0 +1,267 @@
+Day4 
+Default constraint:
+
+create table course(coursecode number(5) constraint c_pk primary key,coursename varchar(20) constraint c_name unique,
+durationinhrs number(10) default 9);
+desc course;
+insert into course (coursecode,coursename) values (100,'RDBMS');
+select*from course;
+--alter
+alter table course modify coursename varchar(20) constraint c_name_new not null;
+--drop
+alter table course drop constraint c_name_new;
+alter table course drop constraint c_pk;
+
+composite  primary key:
+
+create table courseregistration(coursecode number(10),empname varchar(30),startdate date,enddate date,score number(3),
+constraint comp_pk primary key (coursecode,empname));
+desc courseregistration;
+
+stored procedure
+
+----Stored procedure
+create table user1(id number(3) primary key,name varchar(20));
+create or replace procedure "insertuser"
+(id in number,
+name in varchar)
+is 
+begin
+insert into user1 values(id,name);
+end;
+begin 
+    insert into user1 values (101,'Keerthana');
+    dbms_output.put_line('data inserted');
+end;
+select*from user1;
+
+create or replace procedure update_empname (empid in number)
+is
+begin
+update user1 set name='Kee kee' where id=empid;
+commit;
+delete user1 where id=empid;
+end;
+execute update_empname(101);
+select*from user1;
+
+
+create or replace function adder(a1 in number, b1 in number)
+return number
+is
+    c1 number(5);
+begin
+    c1:=a1+b1;
+    return c1;
+end;
+ 
+declare
+    c1 number(5);
+begin
+    c1:=adder(10,10);
+    dbms_output.put_line(c1);
+end;
+
+
+saranya
+
+
+[13:12] Saranya Tr (Guest)
+Default constraint: course table: coursecode(PK)
+
+coursename(unique)
+
+durationhrs(default of 9 hrs) - use this to assign the default values to column 
+
+Example: create table course(coursecode number(5) constraint c_pk primary key,
+
+                    coursename varchar(30) constraint c_name unique,
+
+                    durationinhrs number(10) default 9); insert into course(coursecode,coursename) values(100,'RDBMS');
+
+insert into course values(200,'JAVA',8); select * from course; MODIFY CONSTRAINT: alter table course MODIFY coursename varchar(30) CONSTRAINT c_name_new not null; DROP CONSTRAINT: syntax: alter table table-name drop constraint constraint-name; alter table course drop constraint c_name_new; 
+
+alter table course drop constraint c_pk;
+
+------------------------------------------ composite primary key: - if the single column cannot identify the rows uniquely in the table, then combination of columns are required to form the primary key. course:
+
+coursecode(PK)
+
+coursename
+
+durationhrs Emp:
+
+empid(PK)
+
+empname
+
+email
+
+phone
+
+salary
+
+deptcode
+
+manager courseRegistration: coursecode empname   startdate enddate scores
+
+101         'saranya'  9th       11th    55
+
+102          'saranya'  12th      14th    
+
+101          'kavinesh'  9th      11th    75
+
+102          'kavinesh'  12th      14th    75 combination of more than a column which forms composite primary key. 
+
+create table courseregistration(coursecode number(10),empname varchar(30),startdate date,enddate date, score number(3), constraint comp_pk primary key (coursecode,empname));
+
+--------------------------------------------- Stored procedures: -PL/SQL is block structured language. 
+
+- using PL/SQL stored procedure, more than one DML operations can be performed
+
+- stored procedure is a procedure which performs one or more specific tasks. procedure contains, header: contains procedurename, variable/parameter passed to procedures body: contains declare variable, executable section, exception handling(optional) how to pass parameters in procedure? 1. IN - input
+
+2. out - output will be stored
+
+3. INOUT - both input/output will be performed Create Procedures: create [or replace] procedure proce-name
+
+    [parameter..]
+
+IS
+
+    [declaration section]
+
+BEGIN
+
+    [executable section]
+
+Exception(option)
+
+END proce-name; Example: create procedure adder(x in number, y in number, z out number)
+
+IS
+
+BEGIN
+
+    x:=10;
+
+    y:=20;
+
+    z:=x+y;
+
+    dbms_output.put_line(z);
+
+end adder; Example: create table user1(id number(3) primary key,name varchar(30)); create or replace procedure "INSERTUSER"    
+
+(id IN NUMBER,    
+
+name IN VARCHAR2)    
+
+is    
+
+begin    
+
+insert into user1 values(id,name);   
+
+end;   begin
+
+    insertuser(101,'saranya');
+
+    dbms_output.put_line('data inserted');
+
+end;
+
+execute insertuser(102,'kavinesh');
+
+select* from user1; execute insertuser(102,'kavinesh'); Example: create or replace procedure update_empname(empid in number)
+
+is
+
+begin
+
+    update user1 set name='kavinesh guhan' where id=empid;
+
+    commit;
+
+    delete user1 where id=empid;
+
+end; execute update_empname(102);
+
+select * from user1;
+
+--------------------------------------------- PL/SQL Function:
+
+- It return a value
+
+- where procedure does nt return a value syntax: CREATE [OR REPLACE] FUNCTION function_name[parameters]   
+
+RETURN return_datatype  
+
+IS 
+
+BEGIN  
+
+   < function_body >  
+
+END [function_name];   Example 1: create or replace function adder(a1 in number, b1 in number)
+
+return number
+
+is
+
+    c1 number(5);
+
+begin
+
+    c1:=a1+b1;
+
+    return c1;
+
+end; declare
+
+    c1 number(5);
+
+begin
+
+    c1:=adder(10,10);
+
+    dbms_output.put_line(c1);
+
+end; 
+
+Example 2: create table user1(id number(3),name varchar(30));
+
+insert into user1 values(1,'saranya');
+
+insert into user1 values(2,'kavin'); create or replace function totalCustomers
+
+return number
+
+is
+
+    total number(2):=0;
+
+    begin
+
+        select count(*) into total from user1;
+
+        return total;
+
+    end; declare
+
+    c number(2);
+
+begin
+
+    c:=totalCustomers();
+
+    dbms_output.put_line(c);
+
+end;
+
+[13:13] Saranya Tr (Guest)
+javatpoint.com/sql-tutorial
+procedures
+javatpoint.com/sql-tutorial
+
+function reference link - https://www.javatpoint.com/pl-sql-function
